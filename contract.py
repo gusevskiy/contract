@@ -1,15 +1,15 @@
 from docxtpl import DocxTemplate
 from tkinter import *
-import tkinter.ttk as ttk
+# import tkinter.ttk as ttk
 
 window = Tk() #Tk является базовым классом любого Tkinter приложения.
 window.title('contract') # title заголовок окна
 #tab = ttk.Notebook(window)
 
 #tab.add(name, text = 'tabb')
-window.geometry('400x420+100+100')#geometry - устанавливает геометрию окна в формате ширина*высота+x+y
+window.geometry('500x460+100+100')#geometry - устанавливает геометрию окна в формате ширина*высота+x+y
 window.resizable(False, False) #блокирует изменение размеров окна
-window.iconbitmap('1.ico')
+#window.iconbitmap('1.ico')
 
 name = Label(window, text ='Название Юр. лица')# Label отображение надписи в нужном месте
 number = Label(window, text ='№ договора')
@@ -25,7 +25,7 @@ ogrn = Label(window, text = 'ОГРН')
 okato = Label(window, text = 'ОКАТО')
 okved = Label(window, text = 'ОКВЭД')
 bank = Label(window, text = 'БАНК')
-big = Label(window, text = 'БИГ')
+big = Label(window, text = 'БИК')
 r_s = Label(window, text = 'р/с')
 k_s = Label(window, text = 'к/с')
 telefon = Label(window, text = 'Телефон')
@@ -43,8 +43,8 @@ nu = Entry(window, width = 5)
 nu.grid(column = 2, row = 1, columnspan = 2, sticky = W)
 
 
-date.grid(column = 1, row = 2)
-da = Entry(window, width = 10)
+date.grid(column = 1, row=2)
+da = Entry(window, width=10)
 da.grid(column = 2, row = 2, sticky = W)
 
 
@@ -129,7 +129,7 @@ email = Entry(window, width = 20)
 email.grid(column = 2, row = 17, sticky = W)
 
 def ent(self):
-    doc = DocxTemplate("C:\code\Moduli\contract\contract.docx")
+    doc = DocxTemplate("contract.docx")
     context = {'name': na.get(),
                'number': nu.get(),
                'date': da.get(),
@@ -151,7 +151,7 @@ def ent(self):
                'email': email.get()
                }
     doc.render(context)
-    doc.save(f"C:\code\Moduli\contract\созданные\ {na.get()} от {da.get()}.docx")
+    doc.save(f"add/{na.get()} от {da.get()}.docx")
 
 
 button = Button(window, text='создать договор', command=lambda: [ent(self=na)])
