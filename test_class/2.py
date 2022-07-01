@@ -6,6 +6,8 @@ def open_file(filename):
     if filename.endswith('.pdf'):
         filename = Path(filename).stem + ".docx"
         return filename
+    else:
+        return filename
 
 
 

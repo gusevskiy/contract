@@ -1,22 +1,15 @@
 from docxtpl import DocxTemplate
-from tkinter import Tk, Label, Entry, W, Button, LEFT
-import name_bank
+from tkinter import Tk, Label, Entry, W, Button
 
-# import tkinter.ttk as ttk
+from inn_kpp_ogrn import Openfile
 
 window = Tk()  # Tk является базовым классом любого Tkinter приложения.
 window.title('contract')  # title заголовок окна
-# tab = ttk.Notebook(window)
-
-#  tab.add(name, text = 'tabb')
 window.geometry(
     '600x460+100+100')  # geometry - устанавливает геометрию окна
 # в формате ширина*высота+x+y
 window.resizable(False, False)  # блокирует изменение размеров окна
-
-
 # window.iconbitmap('1.ico')
-
 # Label отображение надписи в нужном месте
 # grid упаковщик представляет собой таблицу с ячейками
 Label(window, text='Название Юр. лица').grid(column=1, row=0)
@@ -71,12 +64,12 @@ okved = Entry(window, width=7)
 okved.grid(column=2, row=11, sticky=W)
 big = Entry(window, width=9)
 big.grid(column=2, row=12, sticky=W)
-# bank = Entry(window, width=40)
-# bank.grid(column=2, row=13, columnspan=2, sticky=W)
+bank = Entry(window, width=40)
+bank.grid(column=2, row=13, columnspan=2, sticky=W)
 r_s = Entry(window, width=30)
 r_s.grid(column=2, row=14, columnspan=2, sticky=W)
-# k_s = Entry(window, width=30)
-# k_s.grid(column=2, row=15, columnspan=2, sticky=W)
+k_s = Entry(window, width=30)
+k_s.grid(column=2, row=15, columnspan=2, sticky=W)
 telefon = Entry(window, width=12)
 telefon.grid(column=2, row=16, sticky=W)
 email = Entry(window, width=20)
@@ -92,16 +85,16 @@ def ent():
                'post': po.get(),
                'adress': ad.get(),
                'post_adress': pa.get(),
-               'inn': inn.get(),
-               'kpp': kpp.get(),
+               'inn': Openfile('test_class/spravka.docx').reed_inn(),
+               'kpp': Openfile('test_class/spravka.docx').reed_kpp(),
                'okpo': okpo.get(),
-               'ogrn': ogrn.get(),
+               'ogrn': Openfile('test_class/spravka.docx').reed_kpp(),
                'okato': okato.get(),
                'okved': okved.get(),
-               'bank': input_name_bank(),
+               'bank': bank.get(),
                'big': big.get(),
                'r_s': r_s.get(),
-               # 'k_s': k_s.get(),
+               'k_s': k_s.get(),
                'telefon': telefon.get(),
                'email': email.get()
                }
@@ -109,25 +102,11 @@ def ent():
     doc.save(f"add/{na.get()} от {da.get()}.docx")
 
 
-def input_name_bank():
-    print(name_bank.bank(big.get())['NameP'])
-    print(name_bank.bank(big.get())['Account'])
-    ''' вывод Бик если он есть'''
-    big_big = Label(window, text=big.get()).grid(column=4, row=12)
-    '''Вывод названия банка'''
-    name_Bank = Label(window, text=name_bank.bank(big.get())['NameP'], justify=LEFT) \
-        .grid(column=2, row=13, columnspan=2)
-    # '''вывод кор счета'''
-    # k_s_bank = Label(window, text=name_bank.bank(big.get())['Account'], justify='left') \
-    #     .grid(column=2, row=15, columnspan=2)
-    return name_Bank
-
-
 button = Button(window, text='создать договор', command=lambda: [ent()])
 button.grid(column=3, row=20)
 
-button = Button(window, text='данные банка',
-                command=lambda: [input_name_bank()])
-button.grid(column=3, row=21)
+# button = Button(window, text='данные банка',
+#                 command=lambda: [input_name_bank()])
+# button.grid(column=3, row=21)
 
 window.mainloop()
