@@ -13,13 +13,12 @@ class Openfile:
         self.file_data = None
 
     def reed(self):
-        inn = r"[А-Яа-я]{3}[-|:| ]+(\d{10})"
-        result_inn = []
+        inn = r"([А-Яа-я]{3})[-|:| ]+(\d{10})"
         self.file_data = Document(self.file_path)
         all_par = self.file_data.paragraphs
         for i in all_par:
-            if re.findall(inn, i):
-                print(re.findall(inn, i))
+            if re.findall(inn, i.text):
+                print(re.findall(inn, i.text))
         # print(all_par[2].text)
         # for par in all_par:
         #     print(par.text)
