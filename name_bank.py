@@ -4,7 +4,7 @@ import xml.etree.ElementTree as ET
 # Bic = str('042202603')
 
 
-def bank(bic: str) -> dict:
+def bank(bic) -> dict:
     if len(bic) == 9:
         tree = ET.parse('20220621_ED807_full.xml')
         root = tree.getroot()

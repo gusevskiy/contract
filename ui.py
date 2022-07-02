@@ -1,12 +1,13 @@
 from docxtpl import DocxTemplate
 from tkinter import Tk, Label, Entry, W, Button
 
+import name_bank
 from inn_kpp_ogrn import Openfile
 
 window = Tk()  # Tk является базовым классом любого Tkinter приложения.
 window.title('contract')  # title заголовок окна
 window.geometry(
-    '600x460+100+100')  # geometry - устанавливает геометрию окна
+    '600x500+100+100')  # geometry - устанавливает геометрию окна
 # в формате ширина*высота+x+y
 window.resizable(False, False)  # блокирует изменение размеров окна
 # window.iconbitmap('1.ico')
@@ -85,10 +86,10 @@ def ent():
                'post': po.get(),
                'adress': ad.get(),
                'post_adress': pa.get(),
-               'inn': Openfile('test_class/spravka.docx').reed_inn(),
-               'kpp': Openfile('test_class/spravka.docx').reed_kpp(),
+               'inn': inn.get(),
+               'kpp': kpp.get(),
                'okpo': okpo.get(),
-               'ogrn': Openfile('test_class/spravka.docx').reed_kpp(),
+               'ogrn': ogrn.get(),
                'okato': okato.get(),
                'okved': okved.get(),
                'bank': bank.get(),
@@ -102,11 +103,27 @@ def ent():
     doc.save(f"add/{na.get()} от {da.get()}.docx")
 
 
-button = Button(window, text='создать договор', command=lambda: [ent()])
+def paste_data():
+    if len(big.get()) == 9:
+        inn.delete(0, 'end')
+        inn.insert(0, Openfile('test_class/spravka.docx').reed_inn())
+        kpp.delete(0, 'end')
+        kpp.insert(0, Openfile('test_class/spravka.docx').reed_kpp())
+        ogrn.delete(0, 'end')
+        ogrn.insert(0, Openfile('test_class/spravka.docx').reed_ogrn())
+        bank.delete(0, 'end')
+        bank. insert(0, name_bank.bank(big.get())['NameP'])
+        k_s.delete(0, 'end')
+        k_s.insert(0, name_bank.bank(big.get())['Account'])
+    else:
+        print('inter BIC')
+
+
+button = Button(window, text='создать договор', command=lambda: ent())
 button.grid(column=3, row=20)
 
-# button = Button(window, text='данные банка',
-#                 command=lambda: [input_name_bank()])
-# button.grid(column=3, row=21)
+
+button = Button(window, text='заполнить данные', command=lambda: paste_data())
+button.grid(column=2, row=20)
 
 window.mainloop()

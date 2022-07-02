@@ -32,7 +32,7 @@ class Openfile:
                 return re.findall(kpp, i.text)
 
     def reed_ogrn(self):
-        ogrn = r"[ОГРНогрн{4}[-|:| ]+\d{13}"
+        ogrn = r"[ОГРНогрн{4}[-|:| ]+(\d{13})"
         self.file_data = Document(self.file_path)
         all_par = self.file_data.paragraphs
         for i in all_par:
