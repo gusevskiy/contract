@@ -1,13 +1,12 @@
 from docxtpl import DocxTemplate
-from tkinter import Tk, Label, Entry, W, Button
-
-import name_bank
+from tkinter import Tk, Label, Entry, W, Button, filedialog, E, RIGHT
+import xml.etree.ElementTree as ET
 from inn_kpp_ogrn import Openfile
 
 window = Tk()  # Tk является базовым классом любого Tkinter приложения.
 window.title('contract')  # title заголовок окна
 window.geometry(
-    '600x500+100+100')  # geometry - устанавливает геометрию окна
+    '700x600+100+100')  # geometry - устанавливает геометрию окна
 # в формате ширина*высота+x+y
 window.resizable(False, False)  # блокирует изменение размеров окна
 # window.iconbitmap('1.ico')
@@ -27,6 +26,8 @@ Label(window, text='ОГРН').grid(column=1, row=9)
 Label(window, text='ОКАТО').grid(column=1, row=10)
 Label(window, text='ОКВЭД').grid(column=1, row=11)
 Label(window, text='БИК').grid(column=1, row=12)
+big_error = Label(window, text='')
+big_error.grid(column=3, row=12)
 Label(window, text='БАНК').grid(column=1, row=13)
 Label(window, text='р/с').grid(column=1, row=14)
 Label(window, text='к/с').grid(column=1, row=15)
@@ -77,7 +78,25 @@ email = Entry(window, width=20)
 email.grid(column=2, row=17, sticky=W)
 
 
-def ent():
+def search_in_list_bank(bic) -> dict:
+    """ processing a file from the central bank's website """
+    tree = ET.parse('20220621_ED807_full.xml')
+    root = tree.getroot()
+    data_bank = {}
+    for i in root:
+        if i.attrib['BIC'] == bic:
+            for x in i:
+                data_bank.update(x.attrib)
+    return data_bank
+
+
+def select_file():
+    filedialog.askopenfile(title="Select ")
+    a = filedialog.askopenfilename()
+    return a
+
+
+def create_contract():
     doc = DocxTemplate("contract.docx")
     context = {'name': na.get(),
                'number': nu.get(),
@@ -104,26 +123,35 @@ def ent():
 
 
 def paste_data():
-    if len(big.get()) == 9:
-        inn.delete(0, 'end')
-        inn.insert(0, Openfile('test_class/spravka.docx').reed_inn())
-        kpp.delete(0, 'end')
-        kpp.insert(0, Openfile('test_class/spravka.docx').reed_kpp())
-        ogrn.delete(0, 'end')
-        ogrn.insert(0, Openfile('test_class/spravka.docx').reed_ogrn())
+    inn.delete(0, 'end')
+    inn.insert(0, Openfile('test_class/spravka.docx').reed_inn())
+    kpp.delete(0, 'end')
+    kpp.insert(0, Openfile('test_class/spravka.docx').reed_kpp())
+    ogrn.delete(0, 'end')
+    ogrn.insert(0, Openfile('test_class/spravka.docx').reed_ogrn())
+
+
+def paste_bank():
+    try:
         bank.delete(0, 'end')
-        bank. insert(0, name_bank.bank(big.get())['NameP'])
+        bank.insert(0, search_in_list_bank(big.get())['NameP'])
         k_s.delete(0, 'end')
-        k_s.insert(0, name_bank.bank(big.get())['Account'])
-    else:
-        print('inter BIC')
+        k_s.insert(0, search_in_list_bank(big.get())['Account'])
+        big_error['text'] = ''
+    except KeyError:
+        big_error['text'] = 'Неверный BIC'
+    except TypeError:
+        big_error['text'] = 'Enter BIC'
 
 
-button = Button(window, text='создать договор', command=lambda: ent())
-button.grid(column=3, row=20)
 
-
-button = Button(window, text='заполнить данные', command=lambda: paste_data())
+button = Button(window, text='создать договор', command=lambda: create_contract())
 button.grid(column=2, row=20)
+button = Button(window, text='заполнить данные из файла', command=lambda: paste_data())
+button.grid(column=2, row=21)
+button = Button(window, text='заполнить данные банка', command=lambda: paste_bank())
+button.grid(column=2, row=22)
+button = Button(window, text='Выбрать файл', command=lambda: select_file())
+button.grid(column=2, row=23)
 
 window.mainloop()
