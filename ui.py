@@ -124,11 +124,11 @@ def create_contract():
 
 def paste_data():
     inn.delete(0, 'end')
-    inn.insert(0, Openfile('test_class/spravka.docx').reed_inn())
+    inn.insert(0, Openfile(select_file()).reed_inn())
     kpp.delete(0, 'end')
-    kpp.insert(0, Openfile('test_class/spravka.docx').reed_kpp())
+    kpp.insert(0, Openfile(select_file()).reed_kpp())
     ogrn.delete(0, 'end')
-    ogrn.insert(0, Openfile('test_class/spravka.docx').reed_ogrn())
+    ogrn.insert(0, Openfile(select_file()).reed_ogrn())
 
 
 def paste_bank():
@@ -151,7 +151,5 @@ button = Button(window, text='заполнить данные из файла', 
 button.grid(column=2, row=21)
 button = Button(window, text='заполнить данные банка', command=lambda: paste_bank())
 button.grid(column=2, row=22)
-button = Button(window, text='Выбрать файл', command=lambda: select_file())
-button.grid(column=2, row=23)
 
 window.mainloop()
